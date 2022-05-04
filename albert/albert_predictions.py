@@ -7,8 +7,8 @@ import torch
 import json
 import logging
 from torch.optim import AdamW
-from transformers import Trainer, TrainingArguments, BertTokenizer, BertModel, BertPreTrainedModel, BertConfig, \
-    get_linear_schedule_with_warmup
+from transformers import Trainer, TrainingArguments, BertModel, BertPreTrainedModel, BertConfig, \
+    get_linear_schedule_with_warmup, AlbertTokenizer
 from torch.utils.data import Dataset, DataLoader
 from transformers.utils.notebook import format_time
 from zmq import device
@@ -42,12 +42,11 @@ IDX_PATH = JP_idx
 # 预测文件保存地址
 ZH_preds = params["chinese"]["ZH_preds"]
 JP_preds = params["japanese"]["JP_preds"]
-PRED_PATH = JP_preds if params["my_model]["MY_MODEL_TYPE"] == "japanese" else ZH_preds
+PRED_PATH = JP_preds if params["my_model"]["MY_MODEL_TYPE"] == "japanese" else ZH_preds
 
 
 def model_prediction(test_iter, model):
     """预测函数"""
-    # model.load_state_dict(torch.load("D:\\python_code\\金融评论分类\\cache\\model_stu.bin"))
     checkpoint = torch.load(MY_MODEL)
     model.load_state_dict(checkpoint)
     model = model.to(device)
@@ -87,11 +86,12 @@ def save_file(corrects):
     final_ans = []
     for n in total_ans:
         final_ans.append([n, index_to_label[n]])
+    file_lens = len(os.listdir(PRED_PATH))
 
-    final_path = PRED_PATH +
+    final_path = PRED_PATH + params["use_model"] + f"{file_lens}.csv"
 
     df = pd.DataFrame(final_ans, columns=["idx", "label"])
-    df.to_csv(PRED_PATH, index=True, sep=',')
+    df.to_csv(final_path, index=True, sep=',')
 
 
 def acc_rate(label_path, ans_path):
@@ -128,14 +128,14 @@ def getEvaReport(test_label, test_pred, file_name):
 if __name__ == "__main__":
     test = read_file(TEST_PATH)
     test = process_text(test)
-    tokenizer = BertTokenizer.from_pretrained(NOW_MODEL)
+    tokenizer = AlbertTokenizer.from_pretrained(NOW_MODEL)
     test_data = TestInput(test, tokenizer, 512)
     test_iter = DataLoader(test_data, batch_size=16)
-    model = BertForSeq.from_pretrained(NOW_MODEL)
+    model = ALBertAndTextCnnForSeq.from_pretrained(NOW_MODEL)
     corrects = model_prediction(test_iter, model)
     save_file(corrects)
 
     # acc = acc_rate("D:\\python_code\\paper\\data\\test_label2.csv", "D:\\python_code\\paper\\data\\my_ans.csv")
     # print(acc)
     
-    getEvaReport("D:\python_code\paper\data\\test_label2.csv", PRED_PATH, "textcnn-ans")
+    # getEvaReport("D:\python_code\paper\data\\test_label2.csv", PRED_PATH, "textcnn-ans")

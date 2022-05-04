@@ -183,7 +183,7 @@ def run_train(batch_size, epochs):
         cache_info(final_file,
                    f"====Epoch:[{epoch + 1}/{epochs}] || avg_train_loss={avg_train_loss:.3f} || LR={now_lr}====")
         cache_info(final_file, f"====Training epoch took: {train_time}====")
-        cache_info(final_file, "Running Validation...")Z                      
+        cache_info(final_file, "Running Validation...")
 
         model.eval()
         # 获取验证集的误差和准确度
@@ -274,5 +274,5 @@ def evaluate(model, val_iter):
 
 
 if __name__ == '__main__':
-    run_train(16, 10)
+    run_train(16, 20)
     writer.close()
