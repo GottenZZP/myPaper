@@ -217,6 +217,14 @@ def run_train(batch_size, epochs):
             torch.save(model_to_save.state_dict(), output_model_file)
             # model_to_save.config.to_json_file(output_config_file)
             # tokenizer.save_vocabulary(output_dir)
+            with open("./config.json", mode='r+') as f:
+                ps = f.read()
+                ps = json.loads(ps)
+                ps["my_model"]["MY_MODEL_PATH"] = output_model_file
+                ps["my_model"]["MY_MODEL_TYPE"] = "japanese" if now_model == JP_model else "chinese"
+                ps["my_model"]["MY_MODEL_NAME"] = output_name
+                ps["use_model"] = "albert" if use_model == "albert" else "albert_textcnn"
+                f.write(ps)
             print("Model saved!")
 
         # 若准确率连续三次都没有提升则停止训练

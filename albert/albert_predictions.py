@@ -30,20 +30,19 @@ ZH_test = params["chinese"]["ZH_test"]
 JP_test = params["japanese"]["JP_test"]
 TEST_PATH = JP_test
 # 中文模型地址
-ZH_model = "D:\\python_code\\paper\\models\\bert-base-chinese"
-JP_model = "D:\python_code\paper\models\\bert-base-japanese"
+ZH_model = params["chinese"]["ZH_model"]
+JP_model = params["japanese"]["JP_model"]
 NOW_MODEL = JP_model
 # 自己的模型保存处
-MY_MODEL = "D:\\python_code\\paper\\models\\chinese\\textcnn-model.bin"
-MY_MODEL = "D:\python_code\paper\models\japanese\clean_model_textcnn\\13-model.bin"
+MY_MODEL = params["my_model"]["MY_MODEL_PATH"]
 # 下标文件地址
-JP_idx = "D:\python_code\paper\data\idx.csv"
-ZH_idx = "D:\python_code\paper\corpus\chinese\chinese_idx_35000.csv"
+JP_idx = params["JP_idx"]
+ZH_idx = params["ZH_idx"]
 IDX_PATH = JP_idx
 # 预测文件保存地址
-ZH_preds = "D:\\python_code\\paper\\corpus\\chinese\\preds\\textcnn-ans.csv"
-JP_preds = "D:\python_code\paper\data\preds\\textcnn-ans.csv"
-PRED_PATH = JP_preds
+ZH_preds = params["chinese"]["ZH_preds"]
+JP_preds = params["japanese"]["JP_preds"]
+PRED_PATH = JP_preds if params["my_model]["MY_MODEL_TYPE"] == "japanese" else ZH_preds
 
 
 def model_prediction(test_iter, model):
@@ -88,7 +87,9 @@ def save_file(corrects):
     final_ans = []
     for n in total_ans:
         final_ans.append([n, index_to_label[n]])
-    
+
+    final_path = PRED_PATH +
+
     df = pd.DataFrame(final_ans, columns=["idx", "label"])
     df.to_csv(PRED_PATH, index=True, sep=',')
 

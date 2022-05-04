@@ -4,18 +4,28 @@
   "SEQ_MAX_LEN": 512,
   "warm_up_ratio": 0.1,
   "tensorboard": "D:\\python_code\\paper\\summary\\",
+  "use_model": "albert",
+  "my_model": {
+      "MY_MODEL_PATH": "",
+      "MY_MODEL_TYPE": "chinese",
+      "MY_MODEL_NAME": ""
+  },
   "chinese": {
     "ZH_model": "uer/albert-base-chinese-cluecorpussmall",
     "ZH_train": "D:\\python_code\\paper\\corpus\\chinese\\train2.csv",
     "ZH_val": "D:\\python_code\\paper\\corpus\\chinese\\val2.csv",
     "ZH_test": "D:\\python_code\\paper\\corpus\\chinese\\test.csv",
-    "ZH_save": "D:\\python_code\\paper\\models\\chinese"
+    "ZH_save": "D:\\python_code\\paper\\models\\chinese",
+    "ZH_idx": "D:\\python_code\\paper\\corpus\\chinese\\chinese_idx_35000.csv",
+    "ZH_preds": "D:\\python_code\\paper\\corpus\\chinese\\preds\\"
   },
   "japanese": {
     "JP_model": "ken11/albert-base-japanese-v1",
     "JP_train": "D:\\python_code\\paper\\data\\train6.csv",
     "JP_val": "D:\\python_code\\paper\\data\\val5.csv",
     "JP_test": "D:\\python_code\\paper\\data\\test.csv",
-    "JP_save": "D:\\python_code\\paper\\models\\japanese\\clean_model"
+    "JP_save": "D:\\python_code\\paper\\models\\japanese\\clean_model",
+    "JP_idx": "D:\\python_code\\paper\\data\\idx.csv",
+    "JP_preds": "D:\\python_code\\paper\\data\\preds\\"
   }
 }
