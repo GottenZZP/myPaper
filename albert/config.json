@@ -1,0 +1,21 @@
+{
+  "LR": 3e-5,
+  "GLOBAL_SEED": 6,
+  "SEQ_MAX_LEN": 512,
+  "warm_up_ratio": 0.1,
+  "tensorboard": "D:\\python_code\\paper\\summary\\",
+  "chinese": {
+    "ZH_model": "uer/albert-base-chinese-cluecorpussmall",
+    "ZH_train": "D:\\python_code\\paper\\corpus\\chinese\\train2.csv",
+    "ZH_val": "D:\\python_code\\paper\\corpus\\chinese\\val2.csv",
+    "ZH_test": "D:\\python_code\\paper\\corpus\\chinese\\test.csv",
+    "ZH_save": "D:\\python_code\\paper\\models\\chinese"
+  },
+  "japanese": {
+    "JP_model": "ken11/albert-base-japanese-v1",
+    "JP_train": "D:\\python_code\\paper\\data\\train6.csv",
+    "JP_val": "D:\\python_code\\paper\\data\\val5.csv",
+    "JP_test": "D:\\python_code\\paper\\data\\test.csv",
+    "JP_save": "D:\\python_code\\paper\\models\\japanese\\clean_model"
+  }
+}
