@@ -27,7 +27,7 @@ params = json.loads(config)
 
 # 测试集位置
 ZH_test = params["chinese"]["ZH_test"]
-JP_test = "D:\python_code\paper\data\\test.csv"
+JP_test = params["japanese"]["JP_test"]
 TEST_PATH = JP_test
 # 中文模型地址
 ZH_model = "D:\\python_code\\paper\\models\\bert-base-chinese"
