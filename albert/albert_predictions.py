@@ -4,6 +4,7 @@ from torch import nn
 import time
 import os
 import torch
+import json
 import logging
 from torch.optim import AdamW
 from transformers import Trainer, TrainingArguments, BertTokenizer, BertModel, BertPreTrainedModel, BertConfig, \
@@ -19,8 +20,13 @@ from sklearn.metrics import classification_report
 
 device = d2l.try_gpu()
 
+# 读取配置文件
+with open("./config.json", mode='r') as f:
+    config = f.read()
+params = json.loads(config)
+
 # 测试集位置
-ZH_test = "D:\\python_code\\paper\\corpus\\chinese\\test.csv"
+ZH_test = params["chinese"]["ZH_test"]
 JP_test = "D:\python_code\paper\data\\test.csv"
 TEST_PATH = JP_test
 # 中文模型地址
