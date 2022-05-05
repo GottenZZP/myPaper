@@ -205,7 +205,8 @@ def run_train(batch_size, epochs):
         val_time = format_time(time.time() - val_time_start)
 
         cache_info(final_file,
-                   f"====Epoch:[{epoch + 1}/{epochs}] || avg_val_loss={avg_val_loss:.3f} || avg_val_acc={avg_val_acc:.3f}====")
+                   f"====Epoch:[{epoch + 1}/{epochs}] || avg_val_loss={avg_val_loss:.3f} || avg_val_acc={avg_val_acc:.3f}"
+                   f" || repeat_time={repeat_acc}====")
         cache_info(final_file, f"====Validation epoch took: {val_time}====")
         cache_info(final_file, "")
 

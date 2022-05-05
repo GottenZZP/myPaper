@@ -136,4 +136,4 @@ if __name__ == "__main__":
     # acc = acc_rate("D:\\python_code\\paper\\data\\test_label2.csv", "D:\\python_code\\paper\\data\\my_ans.csv")
     # print(acc)
     
-    getEvaReport("D:\python_code\paper\data\\test_label2.csv", PRED_PATH, "textcnn-ans")
+    getEvaReport(params["JP_test_label"], PRED_PATH, params["my_model"]["MY_MODEL_NAME"][:-4] + str(file_lens))
