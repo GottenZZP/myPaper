@@ -178,6 +178,7 @@ def run_train(batch_size, epochs):
             scheduler.step()
 
         avg_train_loss = total_train_loss / len(train_iter)
+        now_lr = optimizer.param_groups[0]["lr"]
 
         writer.add_scalar("loss/train_loss", avg_train_loss, epoch)
 
@@ -198,7 +199,6 @@ def run_train(batch_size, epochs):
 
         # 动态调整学习率
         adjustLR(max_acc=max_val_acc, now_acc=avg_val_acc, optimizer=optimizer, epoch=epoch)
-        now_lr = optimizer.param_groups[0]["lr"]
 
         writer.add_scalar("learning rate", now_lr, epoch)
 
