@@ -11,7 +11,6 @@ from transformers import Trainer, TrainingArguments, BertModel, BertPreTrainedMo
     get_linear_schedule_with_warmup, AlbertTokenizer
 from torch.utils.data import Dataset, DataLoader
 from transformers.utils.notebook import format_time
-from zmq import device
 from albert_modeling import ALBertAndTextCnnForSeq
 from albert_processFile import InputDataSet, process_text, read_file, TestInput
 from d2l import torch as d2l
@@ -43,6 +42,8 @@ IDX_PATH = JP_idx
 ZH_preds = params["chinese"]["ZH_preds"]
 JP_preds = params["japanese"]["JP_preds"]
 PRED_PATH = JP_preds if params["my_model"]["MY_MODEL_TYPE"] == "japanese" else ZH_preds
+file_lens = len(os.listdir(PRED_PATH))
+final_path = PRED_PATH + params["use_model"] + f"{file_lens}.csv"
 
 
 def model_prediction(test_iter, model):
@@ -86,9 +87,6 @@ def save_file(corrects):
     final_ans = []
     for n in total_ans:
         final_ans.append([n, index_to_label[n]])
-    file_lens = len(os.listdir(PRED_PATH))
-
-    final_path = PRED_PATH + params["use_model"] + f"{file_lens}.csv"
 
     df = pd.DataFrame(final_ans, columns=["idx", "label"])
     df.to_csv(final_path, index=True, sep=',')
@@ -138,4 +136,4 @@ if __name__ == "__main__":
     # acc = acc_rate("D:\\python_code\\paper\\data\\test_label2.csv", "D:\\python_code\\paper\\data\\my_ans.csv")
     # print(acc)
     
-    # getEvaReport("D:\python_code\paper\data\\test_label2.csv", PRED_PATH, "textcnn-ans")
+    getEvaReport("D:\python_code\paper\data\\test_label2.csv", PRED_PATH, "textcnn-ans")
