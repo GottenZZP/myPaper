@@ -93,6 +93,14 @@ def plot_chart(total_var, title):
     plt.show()
 
 
+def adjustLR(max_acc, now_acc, optimizer, epoch):
+    """调整学习率"""
+    if now_acc > max_acc:
+        optimizer.param_groups[0]['lr'] = LR * (0.95 ** epoch)
+    else:
+        optimizer.param_groups[0]['lr'] = LR / (0.95 ** epoch)
+
+
 def run_train(batch_size, epochs):
     set_seed(GLOBAL_SEED)
 
@@ -172,10 +180,6 @@ def run_train(batch_size, epochs):
         avg_train_loss = total_train_loss / len(train_iter)
 
         writer.add_scalar("loss/train_loss", avg_train_loss, epoch)
-        optimizer.param_groups[0]['lr'] = LR * (0.95 ** epoch)
-        now_lr = optimizer.param_groups[0]["lr"]
-
-        writer.add_scalar("learning rate", now_lr, epoch)
 
         train_time = format_time(time.time() - t0)
         val_time_start = time.time()
@@ -191,6 +195,12 @@ def run_train(batch_size, epochs):
 
         writer.add_scalar("loss/val_loss", avg_val_loss, epoch)
         writer.add_scalar("acc/val_acc", avg_val_acc, epoch)
+
+        # 动态调整学习率
+        adjustLR(max_acc=max_val_acc, now_acc=avg_val_acc, optimizer=optimizer, epoch=epoch)
+        now_lr = optimizer.param_groups[0]["lr"]
+
+        writer.add_scalar("learning rate", now_lr, epoch)
 
         val_time = format_time(time.time() - val_time_start)
 

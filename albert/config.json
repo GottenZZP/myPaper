@@ -7,7 +7,7 @@
   "use_model": "albert_textcnn",
   "my_model": {
       "MY_MODEL_PATH": "",
-      "MY_MODEL_TYPE": "chinese",
+      "MY_MODEL_TYPE": "japanese",
       "MY_MODEL_NAME": ""
   },
   "chinese": {
