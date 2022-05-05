@@ -4,7 +4,7 @@
   "SEQ_MAX_LEN": 512,
   "warm_up_ratio": 0.1,
   "tensorboard": "D:\\python_code\\paper\\summary\\",
-  "use_model": "albert",
+  "use_model": "albert_textcnn",
   "my_model": {
       "MY_MODEL_PATH": "",
       "MY_MODEL_TYPE": "chinese",
