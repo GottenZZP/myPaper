@@ -35,8 +35,8 @@ NOW_MODEL = JP_model
 # 自己的模型保存处
 MY_MODEL = params["my_model"]["MY_MODEL_PATH"]
 # 下标文件地址
-JP_idx = params["JP_idx"]
-ZH_idx = params["ZH_idx"]
+JP_idx = params["japanese"]["JP_idx"]
+ZH_idx = params["chinese"]["ZH_idx"]
 IDX_PATH = JP_idx
 # 预测文件保存地址
 ZH_preds = params["chinese"]["ZH_preds"]
@@ -136,4 +136,4 @@ if __name__ == "__main__":
     # acc = acc_rate("D:\\python_code\\paper\\data\\test_label2.csv", "D:\\python_code\\paper\\data\\my_ans.csv")
     # print(acc)
     
-    getEvaReport(params["JP_test_label"], PRED_PATH, params["my_model"]["MY_MODEL_NAME"][:-4] + str(file_lens))
+    getEvaReport(params["japanese"]["JP_test_label"], final_path, params["my_model"]["MY_MODEL_NAME"][:-4] + str(file_lens))
