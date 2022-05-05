@@ -224,7 +224,7 @@ def run_train(batch_size, epochs):
                 ps["my_model"]["MY_MODEL_TYPE"] = "japanese" if now_model == JP_model else "chinese"
                 ps["my_model"]["MY_MODEL_NAME"] = output_name
                 ps["use_model"] = "albert" if use_model == "albert" else "albert_textcnn"
-                f1.write(ps)
+                json.dump(ps, f1, indent=2)
             print("Model saved!")
 
         # 若准确率连续三次都没有提升则停止训练
