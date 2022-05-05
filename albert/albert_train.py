@@ -93,7 +93,7 @@ def plot_chart(total_var, title):
     plt.show()
 
 
-def adjustLR(max_acc, now_acc, optimizer, epoch):
+def adjust_LR(max_acc, now_acc, optimizer, epoch):
     """调整学习率"""
     if now_acc > max_acc:
         optimizer.param_groups[0]['lr'] = LR * (0.95 ** epoch)
@@ -198,7 +198,7 @@ def run_train(batch_size, epochs):
         writer.add_scalar("acc/val_acc", avg_val_acc, epoch)
 
         # 动态调整学习率
-        adjustLR(max_acc=max_val_acc, now_acc=avg_val_acc, optimizer=optimizer, epoch=epoch)
+        adjust_LR(max_acc=max_val_acc, now_acc=avg_val_acc, optimizer=optimizer, epoch=epoch)
 
         writer.add_scalar("learning rate", now_lr, epoch)
 
@@ -239,7 +239,7 @@ def run_train(batch_size, epochs):
             print("Model saved!")
 
         # 若准确率连续三次都没有提升则停止训练
-        if repeat_acc == 3:
+        if repeat_acc == 5:
             break
 
     cache_info(final_file, "")
