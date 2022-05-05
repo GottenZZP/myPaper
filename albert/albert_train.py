@@ -36,7 +36,7 @@ JP_train = params['japanese']['JP_train']
 JP_val = params['japanese']['JP_val']
 JP_save = params['japanese']['JP_save']
 # 当前使用模型
-use_model = 'text_albert'
+use_model = params["use_model"]
 now_model = JP_model
 now_train = ZH_train if now_model == ZH_model else JP_train
 now_val = ZH_val if now_model == ZH_model else JP_val
@@ -172,8 +172,8 @@ def run_train(batch_size, epochs):
         avg_train_loss = total_train_loss / len(train_iter)
 
         writer.add_scalar("loss/train_loss", avg_train_loss, epoch)
+        optimizer.param_groups[0]['lr'] = LR * (0.95 ** epoch)
         now_lr = optimizer.param_groups[0]["lr"]
-        optimizer.param_groups[0]['lr'] = LR * (0.9 ** epoch)
 
         writer.add_scalar("learning rate", now_lr, epoch)
 
