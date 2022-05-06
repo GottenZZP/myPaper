@@ -32,7 +32,7 @@ class TextCNN(nn.Module):
         for i, conv in enumerate(self.filter_list):
             h = F.relu(conv(x))
             mp = nn.MaxPool2d(kernel_size=(12 - self.filter_sizes[i] + 1, 1))
-            pooled = self.dropout(mp(h).permute(0, 3, 2, 1))  # [bs, h=1, w=1, channel=3]
+            pooled = mp(h).permute(0, 3, 2, 1)  # [bs, h=1, w=1, channel=3]
             pooled_outputs.append(pooled)
 
         h_pool = torch.cat(pooled_outputs, 3)  # [bs, h=1, w=1, channel=192]
@@ -46,7 +46,7 @@ class TextCNN(nn.Module):
 class ALBertAndTextCnnForSeq(AlbertPreTrainedModel):
     def __init__(self, config):
         super(ALBertAndTextCnnForSeq, self).__init__(config)
-        self.out_channels = 16
+        self.out_channels = 32
         # 获得预训练模型的参数
         self.config = AlbertConfig(config)
         # 标签数量
