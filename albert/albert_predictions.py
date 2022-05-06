@@ -37,13 +37,15 @@ MY_MODEL = params["my_model"]["MY_MODEL_PATH"]
 # 下标文件地址
 JP_idx = params["japanese"]["JP_idx"]
 ZH_idx = params["chinese"]["ZH_idx"]
-IDX_PATH = JP_idx
+IDX_PATH = JP_idx if NOW_MODEL == JP_model else ZH_idx
 # 预测文件保存地址
 ZH_preds = params["chinese"]["ZH_preds"]
 JP_preds = params["japanese"]["JP_preds"]
 PRED_PATH = JP_preds if params["my_model"]["MY_MODEL_TYPE"] == "japanese" else ZH_preds
 file_lens = len(os.listdir(PRED_PATH))
 final_path = PRED_PATH + params["use_model"] + f"{file_lens}.csv"
+# 预测标签处
+TEST_LABEL = params["japanese"]["JP_test_label"] if NOW_MODEL == JP_model else params["chinese"]["ZH_test_label"]
 
 
 def model_prediction(test_iter, model):
@@ -136,4 +138,4 @@ if __name__ == "__main__":
     # acc = acc_rate("D:\\python_code\\paper\\data\\test_label2.csv", "D:\\python_code\\paper\\data\\my_ans.csv")
     # print(acc)
     
-    getEvaReport(params["japanese"]["JP_test_label"], final_path, params["my_model"]["MY_MODEL_NAME"][:-4] + str(file_lens))
+    getEvaReport(TEST_LABEL, final_path, params["my_model"]["MY_MODEL_NAME"][:-4] + str(file_lens))

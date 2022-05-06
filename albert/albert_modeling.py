@@ -58,7 +58,7 @@ class ALBertAndTextCnnForSeq(AlbertPreTrainedModel):
         self.classifier = nn.Linear(config.hidden_size, self.num_labels)
 
         # textCnn层
-        self.text_cnn = TextCNN(filter_sizes=[2, 3, 4, 5], num_filter=64,
+        self.text_cnn = TextCNN(filter_sizes=[2, 3, 4, 5, 6, 7], num_filter=64,
                                 num_labels=self.num_labels,
                                 hidden_dropout_prob=self.config.hidden_dropout_prob)
 
