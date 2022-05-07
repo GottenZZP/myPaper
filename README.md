@@ -8,3 +8,6 @@
 ### 关于中国数据集
 - 数据目录在 D:\python_code\paper\corpus\chinese
 - train2和val2是最原始文件
+
+### 效果
+- 参数配置：textcnn过滤器大小(2, 3, 4, 5, 6, 7)，核大小768
