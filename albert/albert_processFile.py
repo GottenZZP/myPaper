@@ -225,7 +225,7 @@ class ProcessFile:
                 output.append([t, l])
             df = pd.DataFrame(output, columns=["text", "label"])
 
-        except [Exception]:
+        except:
             texts = df["text"]
             for t in texts:
                 t = t.strip().replace(' ', '')

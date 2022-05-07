@@ -4,6 +4,8 @@
 - train4和val3是去除停用词后的文件
 - train5和val4是去除停用词且数据增强的文件
 - train6和val5是train3和val3进行数据清理后的文件
+- test数据集是没有进行格式化的测试集
+- test2数据集是进行了去除空格等格式化后的测试集
 
 ### 关于中国数据集
 - 数据目录在 D:\python_code\paper\corpus\chinese
