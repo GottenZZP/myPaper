@@ -36,7 +36,7 @@ class TextCNN(nn.Module):
             pooled_outputs.append(pooled)
 
         h_pool = torch.cat(pooled_outputs, 3)  # [bs, h=1, w=1, channel=192]
-        h_pool_flat = torch.reshape(h_pool, [-1, self.num_filter_total])
+        h_pool_flat = self.dropout(torch.reshape(h_pool, [-1, self.num_filter_total]))
 
         output = self.Weight(h_pool_flat) + self.bias  # [bs, n_class]
 

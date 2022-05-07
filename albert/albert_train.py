@@ -240,13 +240,14 @@ def run_train(batch_size, epochs):
             print("Model saved!")
 
         # 若准确率连续三次都没有提升则停止训练
-        if repeat_acc == 5:
+        if repeat_acc == 3:
             break
 
     cache_info(final_file, "")
     cache_info(final_file, "   Training Completed!")
     print(f"Total train time: {format_time(time.time() - total_time_start)}")
     plot_chart(total_loss, "loss")
+    print(f"max acc is : {max_val_acc}")
 
 
 def evaluate(model, val_iter):
