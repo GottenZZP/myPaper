@@ -14,16 +14,16 @@ logging.set_verbosity_error()
 
 
 class TextCNN(nn.Module):
-    def __init__(self, filter_sizes, num_filter, num_labels, hidden_dropout_prob):
+    def __init__(self, filter_sizes, num_filter, num_labels):
         super().__init__()
         self.filter_sizes = filter_sizes
         self.num_filter_total = num_filter * len(filter_sizes)
         self.Weight = nn.Linear(self.num_filter_total, num_labels, bias=False)
         self.bias = nn.Parameter(torch.ones([num_labels]))
         self.filter_list = nn.ModuleList([
-            nn.Conv2d(1, num_filter, kernel_size=(size, 768)) for size in filter_sizes
+            nn.Conv2d(1, num_filter, kernel_size=(size, 128)) for size in filter_sizes
         ])
-        self.dropout = nn.Dropout(hidden_dropout_prob)
+        self.dropout = nn.Dropout(0.5)
 
     def forward(self, x):
         x = x.unsqueeze(1)
@@ -46,7 +46,7 @@ class TextCNN(nn.Module):
 class ALBertAndTextCnnForSeq(AlbertPreTrainedModel):
     def __init__(self, config):
         super(ALBertAndTextCnnForSeq, self).__init__(config)
-        self.out_channels = 32
+        self.out_channels = 3
         # 获得预训练模型的参数
         self.config = AlbertConfig(config)
         # 标签数量
@@ -58,9 +58,8 @@ class ALBertAndTextCnnForSeq(AlbertPreTrainedModel):
         self.classifier = nn.Linear(config.hidden_size, self.num_labels)
 
         # textCnn层
-        self.text_cnn = TextCNN(filter_sizes=[2, 3, 4, 5, 6, 7], num_filter=64,
-                                num_labels=self.num_labels,
-                                hidden_dropout_prob=self.config.hidden_dropout_prob)
+        self.text_cnn = TextCNN(filter_sizes=[3, 4, 5], num_filter=3,
+                                num_labels=self.num_labels)
 
         # 初始化权重
         self.init_weights()
