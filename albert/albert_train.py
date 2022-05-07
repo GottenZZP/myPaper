@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 from torch import nn
 import time
 import os
@@ -237,6 +238,7 @@ def run_train(batch_size, epochs):
                 ps["use_model"] = "albert" if use_model == "albert" else "albert_textcnn"
             with open("./config.json", mode='w') as f2:
                 json.dump(ps, f2, indent=2)
+
             print("Model saved!")
 
         # 若准确率连续三次都没有提升则停止训练
@@ -248,6 +250,17 @@ def run_train(batch_size, epochs):
     print(f"Total train time: {format_time(time.time() - total_time_start)}")
     plot_chart(total_loss, "loss")
     print(f"max acc is : {max_val_acc}")
+
+    out = [params["my_model"]["MY_MODEL_NAME"],
+           params["use_model"],
+           "chinese" if now_model == ZH_model else "japanese",
+           str(now_train).split('\\')[-1],
+           str(now_val).split('\\')[-1],
+           LR,
+           GLOBAL_SEED,
+           max_val_acc]
+    df = pd.DataFrame(out, columns=["model_name", "use_model", "date_type", "train", "val", "LR", "GLOBAL_SEED", "max_val_acc"])
+    df.to_csv("../exp_res.csv", mode='a')
 
 
 def evaluate(model, val_iter):
