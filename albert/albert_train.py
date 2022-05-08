@@ -105,7 +105,8 @@ def adjust_LR(max_acc, now_acc, optimizer, epoch):
 def run_train(batch_size, epochs):
     set_seed(GLOBAL_SEED)
 
-    model = ALBertForSeq.from_pretrained(now_model) if use_model == 'albert' else ALBertAndTextCnnForSeq.from_pretrained(now_model)
+    model = ALBertForSeq.from_pretrained(
+        now_model) if use_model == 'albert' else ALBertAndTextCnnForSeq.from_pretrained(now_model)
 
     train = read_file(now_train)
     val = read_file(now_val)
@@ -251,16 +252,18 @@ def run_train(batch_size, epochs):
     plot_chart(total_loss, "loss")
     print(f"max acc is : {max_val_acc}")
 
-    out = [params["my_model"]["MY_MODEL_NAME"],
-           params["use_model"],
-           "chinese" if now_model == ZH_model else "japanese",
-           str(now_train).split('\\')[-1],
-           str(now_val).split('\\')[-1],
-           LR,
-           GLOBAL_SEED,
-           max_val_acc]
-    df = pd.DataFrame(out, columns=["model_name", "use_model", "date_type", "train", "val", "LR", "GLOBAL_SEED", "max_val_acc"])
-    df.to_csv("../exp_res.csv", mode='a')
+    out = [
+        [params["my_model"]["MY_MODEL_NAME"],
+         params["use_model"],
+         "chinese" if now_model == ZH_model else "japanese",
+         str(now_train).split('\\')[-1],
+         str(now_val).split('\\')[-1],
+         LR,
+         GLOBAL_SEED,
+         max_val_acc]
+    ]
+    df = pd.DataFrame(out)
+    df.to_csv("../exp_res.csv", mode='a', header=False, index=False)
 
 
 def evaluate(model, val_iter):
