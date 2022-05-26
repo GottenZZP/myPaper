@@ -232,7 +232,7 @@ class ProcessFile:
                 output.append(t)
             df = pd.DataFrame(output, columns=["text"])
 
-        self.save_file(df, "data", "test2")
+        self.save_file(df, "data", "val2_del_split")
 
     def split_train_val(self, file_path, rite):
         if not os.path.exists(file_path):
@@ -369,6 +369,14 @@ def process_text(data):
     return data
 
 
+def merge_train_test(train_path, test_path):
+    train = pd.read_csv(train_path)
+    test = pd.read_csv(test_path)
+    total = train.append(test)
+    total.index = [x for x in range(len(total))]
+    total.to_csv("D:\python_code\paper\data\\total3.csv")
+
+
 class InputDataSet:
 
     def __init__(self, data, tokenizer, max_len):
@@ -440,5 +448,6 @@ class TestInput:
 
 
 if __name__ == '__main__':
-    obj = ProcessFile("D:\\python_code\\paper")
-    obj.norm_data("D:\\python_code\\paper\\data\\test.csv")
+    # obj = ProcessFile("D:\\python_code\\paper")
+    # obj.norm_data("D:\\python_code\\paper\\data\\val2.csv")
+    merge_train_test("D:\python_code\paper\data\\train2_del_split.csv", "D:\python_code\paper\data\\val2_del_split.csv")

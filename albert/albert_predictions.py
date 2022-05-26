@@ -10,11 +10,11 @@ from torch.optim import AdamW
 from transformers import Trainer, TrainingArguments, BertModel, BertPreTrainedModel, BertConfig, \
     get_linear_schedule_with_warmup, AlbertTokenizer
 from torch.utils.data import Dataset, DataLoader
+from torch import softmax
 from transformers.utils.notebook import format_time
 from albert_modeling import ALBertAndTextCnnForSeq
 from albert_processFile import InputDataSet, process_text, read_file, TestInput
 from d2l import torch as d2l
-from albert_train import cache_info
 from sklearn.metrics import classification_report
 
 device = d2l.try_gpu()
@@ -73,6 +73,60 @@ def model_prediction(test_iter, model):
     return corrects
 
 
+def my_prediction(model, testing_loader, test_label, info_name, device):
+    """Prediction function"""
+
+    final_file = os.path.join("D:\python_code\paper\data\preds", info_name + "-preds.txt")
+    labels = pd.read_csv(test_label)["idx"]
+    labels = np.array([x for x in labels])
+    lst_prediction = []
+    lst_true = []
+    lst_prob = []
+    model.eval()
+    print("Evaluate Start!")
+    for step, batch in enumerate(testing_loader):
+        print(f"The [{step + 1}]/[{len(testing_loader)}]")
+        with torch.no_grad():
+            input_ids = batch["input_ids"].to(device)
+            attention_mask = batch["attention_mask"].to(device)
+            token_type_ids = batch["token_type_ids"].to(device)
+
+            outputs = model(input_ids, attention_mask, token_type_ids)
+            probs = softmax(outputs.logits, dim=1)
+            logits = torch.argmax(probs, dim=1)
+            preds = logits.detach().cpu().numpy()
+
+            lst_prediction.append(preds)
+            lst_prob.append(probs)
+    print("Evaluate End!")
+
+    lst_true = [int(l) for l in labels]
+    lst_prediction = [int(i) for l in lst_prediction for i in l]
+    lst_prob = [i.to('cpu').numpy() for prob in lst_prob for i in prob]
+
+    return lst_prob, lst_true
+
+
+def get_result(pred, lst_true):
+    """Get final result"""
+    from sklearn.metrics import accuracy_score, f1_score
+
+    acc = accuracy_score(lst_true, pred)
+    f1_micro = f1_score(lst_true, pred, average='micro')
+    f1_macro = f1_score(lst_true, pred, average='macro')
+
+    return acc, f1_micro, f1_macro
+
+
+def avg_prediction(k_result, lst_true):
+    k_result = np.array(k_result)
+    avg_probs = np.sum(k_result, axis=0) / 5
+    avg_probs = torch.from_numpy(avg_probs)
+    avg_preds = torch.argmax(avg_probs, dim=1)
+    acc, f1_micro, f1_macro = get_result(avg_preds, lst_true)
+    print(f"\navg: acc: {acc}, f1_micro: {f1_micro}, f1_macro: {f1_macro}")
+
+
 def save_file(corrects):
     """保存预测文件"""
     total_ans = []
@@ -123,6 +177,13 @@ def getEvaReport(test_label, test_pred, file_name):
     out = pd.DataFrame(df3.values.T, index=df3.columns, columns=df3.index)
     print(out)
     out.to_csv(f"D:\\python_code\\paper\\report\\{file_name}.csv")
+
+
+def cache_info(out_file, text):
+    """输出日志"""
+    print(text)
+    with open(out_file, mode="a+") as f:
+        f.writelines(text + '\n')
 
 
 if __name__ == "__main__":

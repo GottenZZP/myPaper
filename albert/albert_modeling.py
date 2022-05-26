@@ -23,10 +23,12 @@ class TextCNN(nn.Module):
         self.filter_list = nn.ModuleList([
             nn.Conv2d(1, num_filter, kernel_size=(size, 768)) for size in filter_sizes
         ])
-        self.dropout = nn.Dropout(0.5)
+        self.dropout = nn.Dropout(0.1)
 
     def forward(self, x):
         x = x.unsqueeze(1)
+        # x = x.permute(1, 0, 2)
+        # x = x.unsqueeze(1)
 
         pooled_outputs = []
         for i, conv in enumerate(self.filter_list):
@@ -54,6 +56,8 @@ class ALBertAndTextCnnForSeq(AlbertPreTrainedModel):
         # albert模型
         self.albert = AlbertModel(config)
 
+        self.relu = nn.ReLU()
+
         # 最后的分类层
         self.classifier = nn.Linear(config.hidden_size, self.num_labels)
 
@@ -78,7 +82,9 @@ class ALBertAndTextCnnForSeq(AlbertPreTrainedModel):
         )
 
         hidden_states = outputs.hidden_states  # shape = (batch_size=16, sequence_length=512, hidden_size=768)
+        # hidden_states = outputs[0]
         cls_embeddings = hidden_states[1][:, 0, :].unsqueeze(1)
+        # cls_embeddings = self.relu(hidden_states)
         for i in range(2, 13):
             cls_embeddings = torch.cat((cls_embeddings, hidden_states[i][:, 0, :].unsqueeze(1)), dim=1)
         # logits会返回一个还未经过
@@ -105,7 +111,7 @@ class ALBertForSeq(AlbertPreTrainedModel):
         super(ALBertForSeq, self).__init__(config)
 
         self.config = AlbertConfig(config)
-        self.num_labels = 40
+        self.num_labels = 31
         self.albert = AlbertModel(config)
         self.dropout = nn.Dropout(config.hidden_dropout_prob)
 
